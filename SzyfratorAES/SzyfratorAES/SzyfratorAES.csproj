@@ -60,6 +60,7 @@
     <Compile Include="Magic.xaml.cs">
       <DependentUpon>Magic.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PressEnter.cs" />
     <Compile Include="Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>

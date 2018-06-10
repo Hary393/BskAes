@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace SzyfratorAES
 {
     /// <summary>
@@ -24,6 +25,7 @@ namespace SzyfratorAES
         public Login()
         {
             InitializeComponent();
+            this.LoginNameTxtBox.Focus();
         }
 
         private void Exitbutton_Click(object sender, RoutedEventArgs e)
@@ -116,6 +118,16 @@ namespace SzyfratorAES
         public string GetCurrentUser()
         {
             return CurrentUser;
+        }
+
+        private void SendCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SendCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Loginbutton_Click(sender,e);
         }
     }
 }

@@ -90,24 +90,31 @@ namespace SzyfratorAES
 
         private void addPersonButton_Click(object sender, RoutedEventArgs e)
         {
-            string who = usersListView.SelectedItem.ToString();
-            if (!selectedUserList.Contains(who))
+            if (usersListView.SelectedItem != null)
             {
-                selectedUserList.Add(who);
-                ICollectionView view = CollectionViewSource.GetDefaultView(selectedUserList);
-                view.Refresh();
+                string who = usersListView.SelectedItem.ToString();
+                if (!selectedUserList.Contains(who))
+                {
+                    selectedUserList.Add(who);
+                    ICollectionView view = CollectionViewSource.GetDefaultView(selectedUserList);
+                    view.Refresh();
+                }
             }
         }
         private void removePersonButton_Click(object sender, RoutedEventArgs e)
         {
-            string who=reciversListView.SelectedItem.ToString();
-            selectedUserList.Remove(who);
-            ICollectionView view = CollectionViewSource.GetDefaultView(selectedUserList);
-            view.Refresh();
+            if (reciversListView.SelectedItem != null)
+            {
+                string who = reciversListView.SelectedItem.ToString();
+                selectedUserList.Remove(who);
+                ICollectionView view = CollectionViewSource.GetDefaultView(selectedUserList);
+                view.Refresh();
+            }
         }
 
         private void magicButton_Click(object sender, RoutedEventArgs e)
         {
+            string fileWhereToSave = pathLabel.Content.ToString() + "\\\\" + NazwaWynikowaTxtBox.Text + System.IO.Path.GetExtension(fileLabel1.Content.ToString());
             if (!File.Exists(fileLabel1.Content.ToString()))
             {
                 MessageBox.Show("Plik nie istnieje.", "Plik nie istnieje", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -120,27 +127,23 @@ namespace SzyfratorAES
             {
                 MessageBox.Show("Nazwa Wynikowa jest pusta", "Nazwa Wynikowa jest pusta", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+            else if (File.Exists(fileWhereToSave))
+            {
+                MessageBox.Show("Istnieje Plik o Podanej Nazwie", "Istnieje Plik o Podanej Nazwie", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             else if (szyfrujButton.IsChecked==true)
             {
-                if (selectedUserList.Count == 1)
+                if (selectedUserList.Count > 0)
                 {
                     try
                     {
+
                         CipherMashine CMachine = new CipherMashine();
                         string file = fileLabel1.Content.ToString();
                         string password = "abcd1234";
 
-                        byte[] bytesToBeEncrypted = File.ReadAllBytes(file);
-                        byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                        CMachine.AES_Encrypt(file,fileWhereToSave, password, ((ComboBoxItem)comboBox.SelectedItem).Content.ToString(), ((ComboBoxItem)comboBoxKey.SelectedItem).Content.ToString(), selectedUserList.ToList<string>());
 
-                        // Hash the password with SHA256
-                        passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
-
-                        byte[] bytesEncrypted = CMachine.AES_Encrypt(bytesToBeEncrypted, passwordBytes, comboBox.SelectedItem.ToString());
-
-                        string fileEncrypted = pathLabel.Content.ToString() + "\\\\" + NazwaWynikowaTxtBox.Text;
-
-                        File.WriteAllBytes(fileEncrypted, bytesEncrypted);
                         MessageBox.Show("Zakończono", "Szyfruj", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     catch (Exception)
@@ -152,12 +155,12 @@ namespace SzyfratorAES
                 }
                 else
                 {
-                    MessageBox.Show("Wybierz tylko 1 odbiorcę", "Wybierz tylko 1 odbiorcę", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Wybierz chociaż 1 odbiorcę", "Wybierz chociaż 1 odbiorcę", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else if(deszyfrujButton.IsChecked == true)
             {
-                if (selectedUserList.Count > 0)
+                if (selectedUserList.Count == 1)
                 {
                     try
                     {
@@ -165,14 +168,8 @@ namespace SzyfratorAES
                         string fileEncrypted= fileLabel1.Content.ToString();
                         string password = "abcd1234";
 
-                        byte[] bytesToBeDecrypted = File.ReadAllBytes(fileEncrypted);
-                        byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-                        passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
+                        CMachine.AES_Decrypt(fileEncrypted, fileWhereToSave, password, ((ComboBoxItem)comboBox.SelectedItem).Content.ToString());
 
-                        byte[] bytesDecrypted = CMachine.AES_Decrypt(bytesToBeDecrypted, passwordBytes, comboBox.SelectedItem.ToString());
-
-                        string file = pathLabel.Content.ToString() + "\\\\" + NazwaWynikowaTxtBox.Text;
-                        File.WriteAllBytes(file, bytesDecrypted);
                         MessageBox.Show("Zakończono", "Deszyfruj", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                     catch (Exception)
@@ -183,14 +180,11 @@ namespace SzyfratorAES
                 }
                 else
                 {
-                    MessageBox.Show("Wybierz chociaż 1 odbiorcę", "Wybierz chociaż 1 odbiorcę", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Wybierz tylko 1 odbiorcę", "Wybierz tylko 1 odbiorcę", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
 
-
-
-
-            //Magic magicWindow = new Magic();
+            //Magic magicWindow = new Magic();             Its magic don't touch it 
             //magicWindow.Show();
         }
 

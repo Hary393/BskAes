@@ -8,12 +8,18 @@
         Title="Szyfrator Aes" Height="447" Width="677.077">
     <Grid>
         <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="157,21,0,0" VerticalAlignment="Top" Width="141">
-            <ComboBoxItem IsSelected="True">Szyfrowanie ECB</ComboBoxItem>
-            <ComboBoxItem>Szyfrowanie CBC</ComboBoxItem>
-            <ComboBoxItem>Szyfrowanie CFB</ComboBoxItem>
-            <ComboBoxItem>Szyfrowanie OFB</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">ECB</ComboBoxItem>
+            <ComboBoxItem>CBC</ComboBoxItem>
+            <ComboBoxItem>CFB</ComboBoxItem>
+            <ComboBoxItem>OFB</ComboBoxItem>
         </ComboBox>
         <Label x:Name="label" Content="Użyj trybu szyfrowania" HorizontalAlignment="Left" Margin="22,17,0,0" VerticalAlignment="Top" Width="130"/>
+        <ComboBox x:Name="comboBoxKey" HorizontalAlignment="Left" Margin="157,43,0,0" VerticalAlignment="Top" Width="141">
+            <ComboBoxItem>128</ComboBoxItem>
+            <ComboBoxItem>192</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">256</ComboBoxItem>
+        </ComboBox>
+        <Label x:Name="labelKey" Content="Rozmiar klucza" HorizontalAlignment="Left" Margin="22,37,0,0" VerticalAlignment="Top" Width="130"/>
         <Button x:Name="fileSelectButton" Content="Wybierz Plik" HorizontalAlignment="Left" Margin="22,68,0,0" VerticalAlignment="Top" Width="75" Click="fileSelectButton_Click"/>
         <Label x:Name="fileLabel1" Content="Brak Wybranego Pliku" HorizontalAlignment="Left" Margin="22,106,0,0" VerticalAlignment="Top" Width="276"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="300" Margin="10,21,0,0" VerticalAlignment="Top" Width="288">
@@ -47,7 +53,7 @@
         <RadioButton x:Name="deszyfrujButton" Content="Deszyfruj" Margin="162,275,409,114"/>
         <RadioButton x:Name="szyfrujButton" Content="Szyfruj" Margin="37,275,541,114"/>
         <Button x:Name="magicButton" Content="MAGIC!" HorizontalAlignment="Left" Margin="564,386,0,0" VerticalAlignment="Top" Width="75" Click="magicButton_Click"/>
-        <Button x:Name="pathSelectButton_Copy" Content="Wybierz Plik" HorizontalAlignment="Left" Margin="22,138,0,0" VerticalAlignment="Top" Width="75" Click="pathSelectButton_Click"/>
+        <Button x:Name="pathSelectButton_Copy" Content="Wybierz Gdzie Zapisać" HorizontalAlignment="Left" Margin="22,138,0,0" VerticalAlignment="Top" Width="148" Click="pathSelectButton_Click"/>
         <Label x:Name="pathLabel" Content="Brak miejsca docelowego" HorizontalAlignment="Left" Margin="22,176,0,0" VerticalAlignment="Top" Width="276"/>
 
     </Grid>

@@ -18,3 +18,23 @@ C:\Users\PC10\Documents\Visual Studio 2015\Projects\BSK\SzyfratorAES\SzyfratorAE
 C:\Users\PC10\Documents\Visual Studio 2015\Projects\BSK\SzyfratorAES\SzyfratorAES\obj\Debug\Register.baml
 C:\Users\PC10\Documents\Visual Studio 2015\Projects\BSK\SzyfratorAES\SzyfratorAES\obj\Debug\Magic.g.cs
 C:\Users\PC10\Documents\Visual Studio 2015\Projects\BSK\SzyfratorAES\SzyfratorAES\obj\Debug\Magic.baml
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\bin\Debug\SzyfratorAES.exe.config
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES.exe
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES.pdb
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\bin\Debug\SzyfratorAES.exe
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\bin\Debug\SzyfratorAES.pdb
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES.csprojResolveAssemblyReference.cache
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\Login.g.cs
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\Magic.g.cs
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\MainWindow.g.cs
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\Register.g.cs
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\App.g.cs
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES_MarkupCompile.cache
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES_MarkupCompile.lref
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\Login.baml
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\Magic.baml
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\MainWindow.baml
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\Register.baml
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES.g.resources
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES.Properties.Resources.resources
+C:\Users\PC10\Documents\BskAes\SzyfratorAES\SzyfratorAES\obj\Debug\SzyfratorAES.csproj.GenerateResource.Cache

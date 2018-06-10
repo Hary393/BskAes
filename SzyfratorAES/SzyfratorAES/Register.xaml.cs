@@ -25,6 +25,7 @@ namespace SzyfratorAES
         public Register()
         {
             InitializeComponent();
+            this.LoginNameTxtBox.Focus();
         }
 
         private void Exitbutton_Click(object sender, RoutedEventArgs e)
@@ -169,6 +170,17 @@ namespace SzyfratorAES
                 return true;
             }
         }
+
+        private void SendCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void SendCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Registerbutton_Click(sender, e);
+        }
+
 
     }
 }
