@@ -21,14 +21,13 @@ namespace SzyfratorAES
             using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(salt);
-                rng.GetBytes(IV);
+                //rng.GetBytes(IV);
             }
 
             string header=HeaderToString(password,  mode, keySize, selectedUsers, IVString);
 
             FileStream fsCrypt = new FileStream(whereToSave, FileMode.Create);
-            //wpisz sol na poczatek pliku
-            fsCrypt.Write(salt, 0, salt.Length);
+            
 
 
             byte[] passwordBytes = System.Text.Encoding.ASCII.GetBytes(password);
@@ -37,18 +36,19 @@ namespace SzyfratorAES
             stringAsBytes = Encoding.ASCII.GetBytes(header);
             //oblicz rozmiar naglowka i dodaj go na poczatku pliku z wiadocymi zerami
             string result = stringAsBytes.Length.ToString().PadLeft(4, '0');
-
+            //wpisz nagłówek 
             byte[] stringlenghtAsBytes = new byte[4];
             stringlenghtAsBytes = Encoding.ASCII.GetBytes(result);
             fsCrypt.Write(stringlenghtAsBytes, 0, stringlenghtAsBytes.Length);
             fsCrypt.Write(stringAsBytes, 0, stringAsBytes.Length);
 
-            
-            byte[] encryptedBytes = null;
+
 
             // Set your salt here, change it to meet your flavor:
             // The salt bytes must be at least 8 bytes.
-
+            //wpisz sol na poczatek pliku
+            fsCrypt.Write(salt, 0, salt.Length);
+            byte[] encryptedBytes = null;
             using (RijndaelManaged AES = new RijndaelManaged())
             {
                 if (keySize.Contains("128"))
@@ -64,6 +64,7 @@ namespace SzyfratorAES
                     AES.KeySize = 256;
                 }
                 AES.BlockSize = 128;
+                AES.Padding = PaddingMode.PKCS7;
 
                 var key = new Rfc2898DeriveBytes(passwordBytes, salt, 10000);
                 AES.Key = key.GetBytes(AES.KeySize / 8);
@@ -86,6 +87,7 @@ namespace SzyfratorAES
                 {
                     AES.Mode = CipherMode.OFB;
                 }
+
                 CryptoStream cs = new CryptoStream(fsCrypt, AES.CreateEncryptor(), CryptoStreamMode.Write);
                 FileStream fsIn = new FileStream(originFile, FileMode.Open);
 
@@ -119,15 +121,13 @@ namespace SzyfratorAES
 
             return encryptedBytes;
         }
-        public byte[] AES_Decrypt(string originFile, string whereToSave, string password, string mode)
+        public byte[] AES_Decrypt(string originFile, string whereToSave, string password)
         {
             
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
             
             FileStream fsCrypt = new FileStream(originFile, FileMode.Open);
-            //odczytaj sol
-            byte[] salt = new byte[32];
-            fsCrypt.Read(salt, 0, salt.Length);
+            
             //odczytaj rozmiar naglowka
             byte[] stringLenghtAsBytes = new byte[4];
             fsCrypt.Read(stringLenghtAsBytes, 0, stringLenghtAsBytes.Length);
@@ -138,20 +138,43 @@ namespace SzyfratorAES
             fsCrypt.Read(stringAsBytes, 0, stringAsBytes.Length);
             string header = System.Text.Encoding.ASCII.GetString(stringAsBytes);
 
-            
-            byte[] decryptedBytes = null;
+            string[] headerArray;
+            headerArray = header.Split('|');
+            //na podstawie pozycji w nagłówku uzupełnij pola 
+            string keySize = headerArray[4];
+            string mode = headerArray[8];
 
+            string IVString = headerArray[10];
+            byte[] IV = System.Text.Encoding.ASCII.GetBytes(IVString);
+            //11 ApprovedUsers 12User 13username 14SessionKey 15paswd
+
+            byte[] decryptedBytes = null;
+            //odczytaj sol
+            byte[] salt = new byte[32];
+            fsCrypt.Read(salt, 0, salt.Length);
             // Set your salt here, change it to meet your flavor:
             // The salt bytes must be at least 8 bytes.
 
             using (RijndaelManaged AES = new RijndaelManaged())
             {
-                AES.KeySize = 256;
+                if (keySize.Contains("128"))
+                {
+                    AES.KeySize = 128;
+                }
+                if (keySize.Contains("192"))
+                {
+                    AES.KeySize = 192;
+                }
+                if (keySize.Contains("256"))
+                {
+                    AES.KeySize = 256;
+                }
                 AES.BlockSize = 128;
+                AES.Padding = PaddingMode.PKCS7;
 
-                var key = new Rfc2898DeriveBytes(passwordBytes, salt, 1000);
+                var key = new Rfc2898DeriveBytes(passwordBytes, salt, 10000);
                 AES.Key = key.GetBytes(AES.KeySize / 8);
-                AES.IV = key.GetBytes(AES.BlockSize / 8);
+                AES.IV = IV;
                 if (mode.Contains("CBC"))
                 {
                     AES.Mode = CipherMode.CBC;

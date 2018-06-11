@@ -150,7 +150,6 @@ namespace SzyfratorAES
                     {
                         MessageBox.Show("Szyfracja nie wyszła", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-                        //AesSzyfrator.EncryptAes(fileLabel1.Content.ToString(), pathLabel.Content.ToString(), "kek", "huehuehuehue", comboBox.SelectedItem.ToString(),NazwaWynikowaTxtBox.Text);
                     }
                 }
                 else
@@ -168,7 +167,7 @@ namespace SzyfratorAES
                         string fileEncrypted= fileLabel1.Content.ToString();
                         string password = "abcd1234";
 
-                        CMachine.AES_Decrypt(fileEncrypted, fileWhereToSave, password, ((ComboBoxItem)comboBox.SelectedItem).Content.ToString());
+                        CMachine.AES_Decrypt(fileEncrypted, fileWhereToSave, password);
 
                         MessageBox.Show("Zakończono", "Deszyfruj", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
@@ -176,7 +175,6 @@ namespace SzyfratorAES
                     {
                         MessageBox.Show("Deszyfracja nie wyszła", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
-                    //AesSzyfrator.DecryptAes(fileLabel1.Content.ToString(), pathLabel.Content.ToString(), "kek", "huehuehuehue", comboBox.SelectedItem.ToString(),NazwaWynikowaTxtBox.Text);
                 }
                 else
                 {

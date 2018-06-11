@@ -64,6 +64,7 @@
     <Compile Include="Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RSAHandle.cs" />
     <Compile Include="SHA2salted.cs" />
     <Page Include="Login.xaml">
       <SubType>Designer</SubType>
