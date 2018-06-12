@@ -123,35 +123,38 @@ namespace SzyfratorAES
                 //we need some buffer
                 var sw1 = new System.IO.StringWriter();
                 //we need a serializer
-                var xs = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
+                var xs1 = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
                 //serialize the key into the stream
-                xs.Serialize(sw1, privKey);
+                xs1.Serialize(sw1, privKey);
                 //get the string from the stream
                 privKeyString = sw1.ToString();
 
+                var sw2 = new System.IO.StringWriter();
+                //we need a serializer
+                var xs2 = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
                 //and the public key ...
                 var pubKey = csp.ExportParameters(false);
                 string pubKeyString;
                 //serialize the key into the stream
-                xs.Serialize(sw1, pubKey);
+                xs2.Serialize(sw2, pubKey);
                 //get the string from the stream
-                pubKeyString = sw1.ToString();
+                pubKeyString = sw2.ToString();
 
 
                 string dirpathPub = dirpath + @"\PUGB";
                 System.IO.Directory.CreateDirectory(dirpathPub);
                 dirpathPub+= @"\PUGB.txt";
-                using (StreamWriter sw = File.CreateText(dirpathPub))
-                {   //create the file for publicKey
-                    sw.WriteLine(pubKeyString);
-                }
+                File.WriteAllText(dirpathPub, pubKeyString);
+                //using (StreamWriter sw = File.CreateText(dirpathPub))
+                //{   //create the file for publicKey
+                //    sw.WriteLine(pubKeyString);
+                //}
 
 
                 string dirpathPriv = dirpath + @"\PRIV";
                 System.IO.Directory.CreateDirectory(dirpathPriv);
                 dirpathPriv += @"\PRIV.txt";
                 RSAHandle.EncryptPrivate(privKeyString, SHA2salted.GenerateSHA512String(password, salt1), dirpathPriv);
-                string result=RSAHandle.DecryptPrivate(SHA2salted.GenerateSHA512String(password, salt1), dirpathPriv);
                 this.Close();
             }
             catch (Exception)

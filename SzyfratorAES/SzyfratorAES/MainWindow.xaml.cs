@@ -140,13 +140,12 @@ namespace SzyfratorAES
 
                         CipherMashine CMachine = new CipherMashine();
                         string file = fileLabel1.Content.ToString();
-                        string password = "abcd1234";
 
-                        CMachine.AES_Encrypt(file,fileWhereToSave, password, ((ComboBoxItem)comboBox.SelectedItem).Content.ToString(), ((ComboBoxItem)comboBoxKey.SelectedItem).Content.ToString(), selectedUserList.ToList<string>());
+                        CMachine.AES_Encrypt(file,fileWhereToSave, LoggedUser, ((ComboBoxItem)comboBox.SelectedItem).Content.ToString(), ((ComboBoxItem)comboBoxKey.SelectedItem).Content.ToString(), selectedUserList.ToList<string>());
 
                         MessageBox.Show("Zakończono", "Szyfruj", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         MessageBox.Show("Szyfracja nie wyszła", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
 
@@ -165,9 +164,9 @@ namespace SzyfratorAES
                     {
                         CipherMashine CMachine = new CipherMashine();
                         string fileEncrypted= fileLabel1.Content.ToString();
-                        string password = "abcd1234";
-
-                        CMachine.AES_Decrypt(fileEncrypted, fileWhereToSave, password);
+                        var array=selectedUserList.ToArray();
+                        foreach (var item in selectedUserList)
+                        CMachine.AES_Decrypt(fileEncrypted, fileWhereToSave, LoggedUser, array[0]);
 
                         MessageBox.Show("Zakończono", "Deszyfruj", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }

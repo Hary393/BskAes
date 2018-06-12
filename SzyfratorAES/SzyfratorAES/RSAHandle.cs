@@ -64,5 +64,51 @@ namespace SzyfratorAES
                 return result;
             }
         }
+        public static RSAParameters StringToKey(string key)
+        {
+            //get a stream from the string
+            var sr = new System.IO.StringReader(key);
+            //we need a deserializer
+            var xs = new System.Xml.Serialization.XmlSerializer(typeof(RSAParameters));
+            //get the object back from the stream
+            var pubKey = (RSAParameters)xs.Deserialize(sr);
+            return pubKey;
+        }
+        public static string EncryptMessage(string publicKey, string toEncrypt)
+        {
+            var key = StringToKey(publicKey);
+            //we have a public key ... let's get a new csp and load that key
+            var csp = new RSACryptoServiceProvider();
+            csp.ImportParameters(key);
+
+            //for encryption, always handle bytes...
+            var bytesPlainTextData = System.Text.Encoding.ASCII.GetBytes(toEncrypt);
+
+            //apply pkcs#1.5 padding and encrypt our data 
+            var bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
+
+            //we might want a string representation of our cypher text
+            var cypherText = System.Text.Encoding.ASCII.GetString(bytesCypherText);
+            return cypherText;
+        }
+        public static string DecryptMessage(string privateKey, string toDecrypt)
+        {
+
+            var key = StringToKey(privateKey);
+
+            var bytesCypherText = System.Text.Encoding.ASCII.GetBytes(toDecrypt);
+
+            //we want to decrypt, therefore we need a csp and load our private key
+            var csp = new RSACryptoServiceProvider();
+            csp.ImportParameters(key);
+
+            //decrypt and strip pkcs#1.5 padding
+            var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
+
+            //get our original plainText back...
+            var plainTextData = System.Text.Encoding.ASCII.GetString(bytesPlainTextData);
+            return plainTextData;
+        }
+
     }
 }

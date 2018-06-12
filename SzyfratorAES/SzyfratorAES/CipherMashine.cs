@@ -11,26 +11,30 @@ namespace SzyfratorAES
 {
     class CipherMashine
     {
-        public byte[] AES_Encrypt(string originFile,string whereToSave,string password,string mode, string keySize,List<string> selectedUsers)
+        public byte[] AES_Encrypt(string originFile,string whereToSave,string logedUser,string mode, string keySize,List<string> selectedUsers)
         {
             //wektor poczatkowy
             string IVString=GetUniqueKey(16);
             byte[] IV = System.Text.Encoding.ASCII.GetBytes(IVString);
             //generowanie soli
             byte[] salt = new byte[32];
+            //sesion key 
+            byte[] passwordBytes = new byte[64];
+            
+
+            //random generator for bytes
             using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(salt);
-                //rng.GetBytes(IV);
+                rng.GetBytes(passwordBytes);
             }
+            string password = System.Text.Encoding.ASCII.GetString(passwordBytes);
 
             string header=HeaderToString(password,  mode, keySize, selectedUsers, IVString);
 
             FileStream fsCrypt = new FileStream(whereToSave, FileMode.Create);
             
 
-
-            byte[] passwordBytes = System.Text.Encoding.ASCII.GetBytes(password);
             byte[] stringAsBytes = new byte[9000];
             //Przekonwertuj naglowek na byte
             stringAsBytes = Encoding.ASCII.GetBytes(header);
@@ -103,8 +107,7 @@ namespace SzyfratorAES
                         cs.Write(buffer, 0, read);
                     }
 
-                    //close up
-                    fsIn.Close();
+                   
 
                 }
                 catch (Exception ex)
@@ -113,6 +116,8 @@ namespace SzyfratorAES
                 }
                 finally
                 {
+                    //close up
+                    fsIn.Close();
                     cs.Close();
                     fsCrypt.Close();
                 }
@@ -121,10 +126,10 @@ namespace SzyfratorAES
 
             return encryptedBytes;
         }
-        public byte[] AES_Decrypt(string originFile, string whereToSave, string password)
+        public byte[] AES_Decrypt(string originFile, string whereToSave, string logedUser, string aPanDoKogo)
         {
             
-            byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
+            
             
             FileStream fsCrypt = new FileStream(originFile, FileMode.Open);
             
@@ -146,7 +151,34 @@ namespace SzyfratorAES
 
             string IVString = headerArray[10];
             byte[] IV = System.Text.Encoding.ASCII.GetBytes(IVString);
-            //11 ApprovedUsers 12User 13username 14SessionKey 15paswd
+            //11 ApprovedUsers 12User 13username 14SessionKey 15paswd 16 User2 17 username2 18Sessionkey
+            string password = "";
+            int i = 13;
+
+            //sprawdz czy znajduje się na liście odbiorców 
+            while (!headerArray[i].Equals("Done"))
+            {
+                if (headerArray[i].Equals(logedUser))
+                {
+                    string pathToPass = @"..\..\UsersFiles\" + logedUser + @"\paswd.txt";
+                    string userpass = "";
+                    using (StreamReader sr = File.OpenText(pathToPass))
+                    {
+                        userpass = sr.ReadLine();
+                    }
+                    string dirpathPriv = @"..\..\UsersFiles\"+ logedUser + @"\PRIV\PRIV.txt";
+                    string resultPrivRSA=RSAHandle.DecryptPrivate(userpass, dirpathPriv);
+                    password = RSAHandle.DecryptMessage(resultPrivRSA, headerArray[i + 1]);
+                }
+
+                i += 3;
+            }
+            // sprawdź czy wybraliśmy siebie jako odbiorcę 
+            if (!logedUser.Equals(aPanDoKogo))
+            {
+                password = "12345678";
+            }
+
 
             byte[] decryptedBytes = null;
             //odczytaj sol
@@ -154,6 +186,8 @@ namespace SzyfratorAES
             fsCrypt.Read(salt, 0, salt.Length);
             // Set your salt here, change it to meet your flavor:
             // The salt bytes must be at least 8 bytes.
+            //password bytes form string password
+            byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
 
             using (RijndaelManaged AES = new RijndaelManaged())
             {
@@ -212,16 +246,9 @@ namespace SzyfratorAES
                     MessageBox.Show("Szyfracja nie wyszła "+ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
 
-                try
-                {
-                    cs.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Szyfracja nie wyszła nie zamknięto streamu " + ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
                 finally
                 {
+                    cs.Close();
                     fsOut.Close();
                     fsCrypt.Close();
                 }
@@ -238,8 +265,15 @@ namespace SzyfratorAES
             header += IV + "|ApprovedUsers|";
             foreach (var user in selectedUsers)
             {
+                string dirpath = @"..\..\UsersFiles\";
+                dirpath += user+ @"\PUGB\PUGB.txt";
+                //read public key from file 
+                var publicKeyString = File.ReadAllText(dirpath);
+                //encrypt sesion key and return string
+                string passwordEncrypted = RSAHandle.EncryptMessage(publicKeyString, password);
                 header+= "User|"+user+"|SessionKey|";
-                header += password + "|";///////////TO DO ENCRYPT
+                //add encrypted session key to Header 
+                header += passwordEncrypted + "|"; //////////////KURWA zakodowany Teks może mieć | i zjebac dekodowanie pliku 
             }
             header += "Done";
             return header;
