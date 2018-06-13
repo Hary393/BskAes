@@ -50,7 +50,7 @@ namespace SzyfratorAES
                 CryptoStream cs = new CryptoStream(fsCrypt, AES.CreateDecryptor(), CryptoStreamMode.Read);
 
                 int read;
-                byte[] buffer = new byte[5000];
+                byte[] buffer = new byte[9000];
 
                 read = cs.Read(buffer, 0, buffer.Length);
                 byte[] privateKeyByte = new byte[read];
@@ -78,17 +78,18 @@ namespace SzyfratorAES
         {
             var key = StringToKey(publicKey);
             //we have a public key ... let's get a new csp and load that key
-            var csp = new RSACryptoServiceProvider();
+            var csp = new RSACryptoServiceProvider(2048);
             csp.ImportParameters(key);
 
             //for encryption, always handle bytes...
-            var bytesPlainTextData = System.Text.Encoding.ASCII.GetBytes(toEncrypt);
+            var bytesPlainTextData = Encoding.UTF8.GetBytes(toEncrypt);
 
             //apply pkcs#1.5 padding and encrypt our data 
-            var bytesCypherText = csp.Encrypt(bytesPlainTextData, false);
+            var bytesCypherText = csp.Encrypt(bytesPlainTextData, true);
 
             //we might want a string representation of our cypher text
-            var cypherText = System.Text.Encoding.ASCII.GetString(bytesCypherText);
+            var cypherText = Convert.ToBase64String(bytesCypherText);
+            csp.PersistKeyInCsp = false;
             return cypherText;
         }
         public static string DecryptMessage(string privateKey, string toDecrypt)
@@ -96,17 +97,18 @@ namespace SzyfratorAES
 
             var key = StringToKey(privateKey);
 
-            var bytesCypherText = System.Text.Encoding.ASCII.GetBytes(toDecrypt);
+            var bytesCypherText = Convert.FromBase64String(toDecrypt);
 
             //we want to decrypt, therefore we need a csp and load our private key
-            var csp = new RSACryptoServiceProvider();
+            var csp = new RSACryptoServiceProvider(2048);
             csp.ImportParameters(key);
 
             //decrypt and strip pkcs#1.5 padding
-            var bytesPlainTextData = csp.Decrypt(bytesCypherText, false);
+            var bytesPlainTextData = csp.Decrypt(bytesCypherText, true);
 
             //get our original plainText back...
-            var plainTextData = System.Text.Encoding.ASCII.GetString(bytesPlainTextData);
+            var plainTextData = Encoding.UTF8.GetString(bytesPlainTextData);
+            csp.PersistKeyInCsp = false;
             return plainTextData;
         }
 

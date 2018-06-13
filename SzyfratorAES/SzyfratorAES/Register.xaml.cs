@@ -155,6 +155,13 @@ namespace SzyfratorAES
                 System.IO.Directory.CreateDirectory(dirpathPriv);
                 dirpathPriv += @"\PRIV.txt";
                 RSAHandle.EncryptPrivate(privKeyString, SHA2salted.GenerateSHA512String(password, salt1), dirpathPriv);
+                string resultPrivRSA = RSAHandle.DecryptPrivate(SHA2salted.GenerateSHA512String(password, salt1), dirpathPriv);
+                var key = RSAHandle.StringToKey(resultPrivRSA);
+
+                //we want to decrypt, therefore we need a csp and load our private key
+                var csp2 = new RSACryptoServiceProvider();
+                csp2.ImportParameters(key);
+                csp.PersistKeyInCsp = false;
                 this.Close();
             }
             catch (Exception)

@@ -19,16 +19,17 @@ namespace SzyfratorAES
             //generowanie soli
             byte[] salt = new byte[32];
             //sesion key 
+            string password = GetUniqueKey(64);
             byte[] passwordBytes = new byte[64];
-            
+            passwordBytes= System.Text.Encoding.ASCII.GetBytes(password);
 
             //random generator for bytes
             using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(salt);
-                rng.GetBytes(passwordBytes);
+                //rng.GetBytes(passwordBytes);
             }
-            string password = System.Text.Encoding.ASCII.GetString(passwordBytes);
+            //string password = System.Text.Encoding.ASCII.GetString(passwordBytes);
 
             string header=HeaderToString(password,  mode, keySize, selectedUsers, IVString);
 
@@ -144,7 +145,8 @@ namespace SzyfratorAES
             string header = System.Text.Encoding.ASCII.GetString(stringAsBytes);
 
             string[] headerArray;
-            headerArray = header.Split('|');
+            //headerArray = header.Split('|');
+            headerArray = header.Split(new string[] { "|||" }, StringSplitOptions.None);
             //na podstawie pozycji w nagłówku uzupełnij pola 
             string keySize = headerArray[4];
             string mode = headerArray[8];
@@ -168,10 +170,11 @@ namespace SzyfratorAES
                     }
                     string dirpathPriv = @"..\..\UsersFiles\"+ logedUser + @"\PRIV\PRIV.txt";
                     string resultPrivRSA=RSAHandle.DecryptPrivate(userpass, dirpathPriv);
-                    password = RSAHandle.DecryptMessage(resultPrivRSA, headerArray[i + 1]);
+                    password = RSAHandle.DecryptMessage(resultPrivRSA, headerArray[i + 2]);
+                    break;
                 }
 
-                i += 3;
+                i += 4;
             }
             // sprawdź czy wybraliśmy siebie jako odbiorcę 
             if (!logedUser.Equals(aPanDoKogo))
@@ -179,7 +182,7 @@ namespace SzyfratorAES
                 password = "12345678";
             }
 
-
+            //password = UTF8toASCII(password);
             byte[] decryptedBytes = null;
             //odczytaj sol
             byte[] salt = new byte[32];
@@ -187,7 +190,7 @@ namespace SzyfratorAES
             // Set your salt here, change it to meet your flavor:
             // The salt bytes must be at least 8 bytes.
             //password bytes form string password
-            byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
+            byte[] passwordBytes = System.Text.Encoding.ASCII.GetBytes(password);
 
             using (RijndaelManaged AES = new RijndaelManaged())
             {
@@ -261,8 +264,8 @@ namespace SzyfratorAES
         private string HeaderToString(string password, string mode, string keySize, List<string> selectedUsers,string IV)
         {
             string header = "";
-            header += "EncryptedFileHeader|Algorithm|AES|KeySize|" + keySize.ToString() + "|BlockSize|128|CipherMode|" + mode.ToString() + "|IV|";
-            header += IV + "|ApprovedUsers|";
+            header += "EncryptedFileHeader|||Algorithm|||AES|||KeySize|||" + keySize.ToString() + "|||BlockSize|||128|||CipherMode|||" + mode.ToString() + "|||IV|||";
+            header += IV + "|||ApprovedUsers|||";
             foreach (var user in selectedUsers)
             {
                 string dirpath = @"..\..\UsersFiles\";
@@ -271,9 +274,9 @@ namespace SzyfratorAES
                 var publicKeyString = File.ReadAllText(dirpath);
                 //encrypt sesion key and return string
                 string passwordEncrypted = RSAHandle.EncryptMessage(publicKeyString, password);
-                header+= "User|"+user+"|SessionKey|";
+                header+= "User|||"+user+"|||SessionKey|||";
                 //add encrypted session key to Header 
-                header += passwordEncrypted + "|"; //////////////KURWA zakodowany Teks może mieć | i zjebac dekodowanie pliku 
+                header += passwordEncrypted + "|||"; //////////////KURWA zakodowany Teks może mieć ||| i zjebac dekodowanie pliku 
             }
             header += "Done";
             return header;
@@ -297,6 +300,16 @@ namespace SzyfratorAES
                 result.Append(chars[b % (chars.Length)]);
             }
             return result.ToString();
+        }
+        public static string UTF8toASCII(string text)
+        {
+            System.Text.Encoding utf8 = System.Text.Encoding.UTF8;
+            Byte[] encodedBytes = utf8.GetBytes(text);
+            Byte[] convertedBytes =
+                    Encoding.Convert(Encoding.UTF8, Encoding.ASCII, encodedBytes);
+            System.Text.Encoding ascii = System.Text.Encoding.ASCII;
+
+            return ascii.GetString(convertedBytes);
         }
     }
 }
