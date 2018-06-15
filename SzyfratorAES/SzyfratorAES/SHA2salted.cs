@@ -9,6 +9,7 @@ namespace SzyfratorAES
 {
     public class SHA2salted
     {
+
         public static string GenerateSHA512String(string inputString, byte[] salt)
         {
             SHA512 sha512 = SHA512Managed.Create();

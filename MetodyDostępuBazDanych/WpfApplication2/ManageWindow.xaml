@@ -1,0 +1,32 @@
+﻿<Window x:Class="WpfApplication2.ManageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication2"
+        mc:Ignorable="d"
+        Title="ManageWindow" Height="300" Width="331.915">
+    <Grid>
+        <DataGrid Name="ManageGrid" CanUserAddRows="False" SelectionChanged="ManageGrid_SelectionChanged"
+            Height="200" Margin="0,18,0,52" ItemsSource="{Binding source}"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID Zamówienia" Binding="{Binding Item1}"  MinWidth="100">
+                
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Data Zamówienia" Binding="{Binding Item2}" MinWidth="100">
+                
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Data Odbioru" Binding="{Binding Item3}">
+                
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Oznacz jako odebrane" Click="ButtonClicked" 
+                Height="25" HorizontalAlignment="Left" Margin="10,235,0,0" 
+                Name="button1" VerticalAlignment="Top" Width="135" />
+        <Button Content="Wyjdź" Click="ButtonExit" 
+                Height="25" HorizontalAlignment="Left" Margin="226,235,0,0" 
+                Name="button2" VerticalAlignment="Top" Width="70" />
+    </Grid>
+</Window>

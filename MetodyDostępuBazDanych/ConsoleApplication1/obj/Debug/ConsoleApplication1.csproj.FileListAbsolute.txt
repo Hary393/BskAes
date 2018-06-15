@@ -1,0 +1,12 @@
+C:\Users\Michal\Documents\Visual Studio 2015\Projects\WpfApplication2\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\Michal\Documents\Visual Studio 2015\Projects\WpfApplication2\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\Michal\Documents\Visual Studio 2015\Projects\WpfApplication2\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\Michal\Documents\Visual Studio 2015\Projects\WpfApplication2\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Michal\Documents\Visual Studio 2015\Projects\WpfApplication2\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\Michal\Documents\Visual Studio 2015\Projects\WpfApplication2\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\jformelx\Documents\BskAes\WpfApplication2\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+C:\Users\jformelx\Documents\BskAes\WpfApplication2\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\jformelx\Documents\BskAes\WpfApplication2\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+C:\Users\jformelx\Documents\BskAes\WpfApplication2\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\jformelx\Documents\BskAes\WpfApplication2\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\jformelx\Documents\BskAes\WpfApplication2\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache

@@ -1,0 +1,27 @@
+﻿<Window x:Class="WpfApplication2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="379.075">
+    <Grid>
+        <Button Content="Zamów Ksiązki" Click="ButtonClicked" 
+                Height="25" HorizontalAlignment="Left" Margin="28,30,0,0" 
+                Name="button1" VerticalAlignment="Top" Width="100" />
+        <Button Content="Nowy Zakup" Click="ButtonClicked2" 
+                Height="25" HorizontalAlignment="Left" Margin="28,73,0,0" 
+                Name="button2" VerticalAlignment="Top" Width="100" />
+
+        <Button Content="Zwrot" Click="ButtonClicked3" 
+                Height="25" HorizontalAlignment="Left" Margin="157,73,0,0" 
+                Name="button3" VerticalAlignment="Top" Width="100" />
+        <Button Content="Odbiór zamówień" Click="ButtonClicked4" 
+                Height="25" HorizontalAlignment="Left" Margin="157,30,0,0" 
+                Name="button4" VerticalAlignment="Top" Width="100" />
+        <Button Content="Wyjście" Click="Exit" 
+                Height="25" HorizontalAlignment="Left" Margin="235,270,0,0" 
+                Name="buttonExit" VerticalAlignment="Top" Width="100" />
+    </Grid>
+</Window>

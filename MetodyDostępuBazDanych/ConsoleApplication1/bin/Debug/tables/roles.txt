@@ -1,0 +1,3 @@
+clerk;clients_r;clients_w;purchases_r;purchases_w;returns_r;returns_w
+supplier;orders_r;orders_w;orderbooks_r;orderbooks_w
+sysadmin;perms_r;perms_w;roles_r;roles_w

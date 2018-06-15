@@ -1,0 +1,4 @@
+sprzedawca1;clerk;supplier
+szef;supplier;sysadmin
+stazysta;clerk
+magazynier;supplier

@@ -1,0 +1,23 @@
+﻿<Window x:Class="WpfApplication2.ReturnWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication2"
+        mc:Ignorable="d"
+        Title="ReturnWindow" Height="300" Width="300">
+    <Grid>
+        <TextBlock Text="ID Zakupu" Margin="10,10,223,224"/>
+        <TextBlock Name="Klient" Text=" " Margin="115,46,21,201"/>
+        <TextBlock Name="Ksiazka" Text=" " Margin="115,65,21,181"/>
+        <ComboBox Name="id" Margin="95,10,80,224" SelectionChanged="id_SelectionChanged"/>
+        <TextBlock Text="Powód zwrotu" Margin="10,65,182,169"/>
+        <TextBox Name="reason" Margin="10,101,80,63"/>
+        <Button Content="Potwierdź" Click="ButtonClicked" 
+                Height="25" HorizontalAlignment="Left" Margin="10,235,0,0" 
+                Name="button1" VerticalAlignment="Top" Width="68" />
+        <Button Content="Anuluj" Click="button2_Click" 
+                Height="25" HorizontalAlignment="Left" Margin="98,235,0,0" 
+                Name="button2" VerticalAlignment="Top" Width="68" />
+    </Grid>
+</Window>

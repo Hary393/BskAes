@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SzyfratorAES
 {
     class CipherMashine
     {
-        public byte[] AES_Encrypt(string originFile,string whereToSave,string logedUser,string mode, string keySize,List<string> selectedUsers)
+        public void AES_Encrypt(string originFile,string whereToSave,string logedUser,string mode, string keySize,List<string> selectedUsers)
         {
             //wektor poczatkowy
             string IVString=GetUniqueKey(16);
@@ -53,7 +54,6 @@ namespace SzyfratorAES
             // The salt bytes must be at least 8 bytes.
             //wpisz sol na poczatek pliku
             fsCrypt.Write(salt, 0, salt.Length);
-            byte[] encryptedBytes = null;
             using (RijndaelManaged AES = new RijndaelManaged())
             {
                 if (keySize.Contains("128"))
@@ -102,13 +102,20 @@ namespace SzyfratorAES
 
                 try
                 {
+                    var mainWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
+                    
+                    mainWin.ProBar.Minimum = 0;
+                    mainWin.ProBar.Maximum=  new System.IO.FileInfo(originFile).Length;
+                    mainWin.ProBar.Dispatcher.Invoke(() => mainWin.ProBar.Value = 0, DispatcherPriority.Background);
+                    double proggres = 0;
                     while ((read = fsIn.Read(buffer, 0, buffer.Length)) > 0)
                     {
                         //Application.DoEvents(); // -> for responsive GUI, using Task will be better!
                         cs.Write(buffer, 0, read);
+                        proggres += read;
+                        mainWin.ProBar.Dispatcher.Invoke(() => mainWin.ProBar.Value = proggres, DispatcherPriority.Background);
                     }
-
-                   
+                    mainWin.ProBar.Dispatcher.Invoke(() => mainWin.ProBar.Value = mainWin.ProBar.Maximum, DispatcherPriority.Background);
 
                 }
                 catch (Exception ex)
@@ -123,11 +130,8 @@ namespace SzyfratorAES
                     fsCrypt.Close();
                 }
             }
-            
-
-            return encryptedBytes;
         }
-        public byte[] AES_Decrypt(string originFile, string whereToSave, string logedUser, string aPanDoKogo)
+        public void AES_Decrypt(string originFile, string whereToSave, string logedUser, string aPanDoKogo)
         {
             
             
@@ -147,7 +151,7 @@ namespace SzyfratorAES
             string[] headerArray;
             //headerArray = header.Split('|');
             headerArray = header.Split(new string[] { "|||" }, StringSplitOptions.None);
-            //na podstawie pozycji w nagłówku uzupełnij pola 
+            //na podstawie pozycji w nagłówku uzupełnij pola sprawdz HeaderToString() żeby wiedzieć co gdzie leży
             string keySize = headerArray[4];
             string mode = headerArray[8];
 
@@ -183,7 +187,6 @@ namespace SzyfratorAES
             }
 
             //password = UTF8toASCII(password);
-            byte[] decryptedBytes = null;
             //odczytaj sol
             byte[] salt = new byte[32];
             fsCrypt.Read(salt, 0, salt.Length);
@@ -238,11 +241,19 @@ namespace SzyfratorAES
                 byte[] buffer = new byte[1048576];
                 try
                 {
+                    var mainWin = Application.Current.Windows.Cast<Window>().FirstOrDefault(window => window is MainWindow) as MainWindow;
+
+                    mainWin.ProBar.Minimum = 0;
+                    mainWin.ProBar.Maximum = new System.IO.FileInfo(originFile).Length;
+                    mainWin.ProBar.Dispatcher.Invoke(() => mainWin.ProBar.Value = 0, DispatcherPriority.Background);
+                    double proggres = 0;
                     while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        //Application.DoEvents();
                         fsOut.Write(buffer, 0, read);
+                        proggres += read;
+                        mainWin.ProBar.Dispatcher.Invoke(() => mainWin.ProBar.Value = proggres, DispatcherPriority.Background);
                     }
+                    mainWin.ProBar.Dispatcher.Invoke(() => mainWin.ProBar.Value = mainWin.ProBar.Maximum, DispatcherPriority.Background);
                 }
                 catch (Exception ex)
                 {
@@ -256,9 +267,6 @@ namespace SzyfratorAES
                     fsCrypt.Close();
                 }
             }
-            
-
-            return decryptedBytes;
         }
 
         private string HeaderToString(string password, string mode, string keySize, List<string> selectedUsers,string IV)

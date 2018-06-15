@@ -1,0 +1,14 @@
+﻿<Window x:Class="WpfApplication2.StartUpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication2"
+        mc:Ignorable="d"
+        Title="StartUpWindow" Height="300" Width="300">
+    <Grid>
+        <TextBox Name="UsrName" Margin="77,95,76,142"></TextBox>
+        <ComboBox Name="role" Margin="77,141,76,96"/>
+        <Button Name="LogIn" Content="Log In" Click="LogIn_Click" Margin="77,194,76,40"></Button>
+    </Grid>
+</Window>

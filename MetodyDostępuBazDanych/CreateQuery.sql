@@ -1,0 +1,56 @@
+﻿CREATE DATABASE Ksiegarnia
+GO
+
+USE Ksiegarnia
+GO
+
+CREATE TABLE Ksiazki
+(
+   	ISBN char(13) PRIMARY KEY, 
+	Tytul varchar(50) NOT NULL, 
+	Autor varchar(50) NOT NULL,
+)
+GO
+
+CREATE TABLE Zamowienia
+(
+	ID_Zamowienia INTEGER IDENTITY(1,1) PRIMARY KEY,
+	Data_Zlozenia date NOT NULL,
+	Data_Odbioru date,
+)
+GO
+
+CREATE TABLE ZamowieniaKsiazek
+(
+	ID_Zamowienia INTEGER FOREIGN KEY REFERENCES Zamowienia NOT NULL,
+	ISBN char(13) FOREIGN KEY REFERENCES Ksiazki NOT NULL,
+	Ilosc INTEGER NOT NULL,
+	CONSTRAINT ID_ZK PRIMARY KEY (ID_Zamowienia, ISBN)
+)
+GO
+
+CREATE TABLE Klienci
+(
+	ID_Klienta INTEGER IDENTITY(1,1) PRIMARY KEY,
+	Imie varchar(50) NOT NULL,
+	Nazwisko varchar(50) NOT NULL,
+)
+GO
+
+CREATE TABLE Zakupy
+(
+    	ID_Zakupu INTEGER IDENTITY(1,1) PRIMARY KEY,
+	ISBN char(13) FOREIGN KEY REFERENCES Ksiazki NOT NULL,
+	ID_Klienta INTEGER FOREIGN KEY REFERENCES Klienci NOT NULL, 
+	Zaplata INTEGER NOT NULL,
+)
+GO
+
+CREATE TABLE Zwroty
+(
+   	ID_Zwroty INTEGER IDENTITY(1,1) PRIMARY KEY,
+	ID_Zakupu INTEGER FOREIGN KEY REFERENCES Zakupy NOT NULL,
+	Data_Zwrotu datetime NOT NULL,
+	Powod varchar(100) NOT NULL,
+)
+GO

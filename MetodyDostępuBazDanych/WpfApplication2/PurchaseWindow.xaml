@@ -1,0 +1,21 @@
+﻿<Window x:Class="WpfApplication2.PurchaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication2"
+        mc:Ignorable="d"
+        Title="PurchaseWindow" Height="300" Width="300">
+    <Grid>
+        <TextBlock Margin="21,10,166,219" Text="Książka"/>
+        <ComboBox Name="ksiazka" Margin="69,10,118,229" RenderTransformOrigin="0.464,0.466"/>
+        <TextBlock Margin="21,46,228,186" Text="Klient"/>
+        <ComboBox Name="klient" Margin="69,46,118,196" RenderTransformOrigin="0.464,0.466"/>
+        <TextBlock Margin="21,88,166,145" Text="Cena"/>
+        <TextBox Name="cena" Margin="69,88,118,153" RenderTransformOrigin="0.464,0.466"
+                TextChanged="cena_TextChanged" />
+        <Button Margin="186,46,10,196" Content="Nowy klient..." Click="ButtonNewClient"/>
+        <Button Margin="21,216,175,22" Content="Zatwierdź" Click="ButtonClicked"/>
+        <Button Margin="133,216,63,22" Content="Anuluj" Click="ButtonClicked"/>
+    </Grid>
+</Window>
